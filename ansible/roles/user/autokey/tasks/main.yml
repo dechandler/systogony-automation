@@ -1,6 +1,0 @@
----
-- name: Clone Autokey Config
-  git:
-    repo: "{{ autokey_git_remote }}"
-    dest: "{{ user.home }}/.config/autokey"
-  become: "{{ user.name }}"

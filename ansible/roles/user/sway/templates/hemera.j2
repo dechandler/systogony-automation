@@ -1,0 +1,19 @@
+{% extends 'config.j2' %}
+
+
+{% block outputs %}
+set $bar_output     eDP-1
+set $laptop_monitor eDP-1
+set $all_monitors   eDP-1
+output eDP-1 resolution 1920x1080 position 0,0
+{% endblock %}
+
+
+{% block inputs %}
+input "1739:0:Synaptics_TM3053-004" {
+    tap enabled
+}
+input "1:1:AT_Translated_Set_2_keyboard" {
+    xkb_options caps:swapescape
+}
+{% endblock %}

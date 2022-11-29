@@ -1,4 +1,26 @@
 
+alias curlt="curl -ksLw 'time_namelookup    : %{time_namelookup}
+time_connect       : %{time_connect}
+time_appconnect    : %{time_appconnect}
+time_pretransfer   : %{time_pretransfer}
+time_redirect      : %{time_redirect}
+time_starttransfer : %{time_starttransfer}
+---------------------------------
+time_total         : %{time_total}
+
+http_code          : %{http_code}
+' -o /dev/null"
+
+alias vim="nvim"
+
+function pwgen () {
+    # Exclude characters that divide words in the terminal
+    #     so it highlights correctly with double-click
+    A='`~!@$^*()+=[]{}\|<>;"'
+    B="${A}'"
+    /usr/bin/pwgen -yr "$B" ${@}
+}
+
 function keys () {
     ADDED="$(ssh-add -l | cut -d' ' -f3)"
     export SSH_ASKPASS="${HOME}/shm/.ssh-askpass"
@@ -10,19 +32,19 @@ function keys () {
     rm -f $SSH_ASKPASS
 }
 
-function curlt () {
-curl -ksLw 'time_namelookup    : %{time_namelookup}
-time_connect       : %{time_connect}
-time_appconnect    : %{time_appconnect}
-time_pretransfer   : %{time_pretransfer}
-time_redirect      : %{time_redirect}
-time_starttransfer : %{time_starttransfer}
----------------------------------
-time_total         : %{time_total}
+# function curlt () {
+# curl -ksLw 'time_namelookup    : %{time_namelookup}
+# time_connect       : %{time_connect}
+# time_appconnect    : %{time_appconnect}
+# time_pretransfer   : %{time_pretransfer}
+# time_redirect      : %{time_redirect}
+# time_starttransfer : %{time_starttransfer}
+# ---------------------------------
+# time_total         : %{time_total}
 
-http_code          : %{http_code}
-' -o /dev/null
-}
+# http_code          : %{http_code}
+# ' -o /dev/null
+# }
 
 function http() {
     curl http://httpcode.info/$1

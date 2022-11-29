@@ -16,3 +16,16 @@
     group: "{{ user.name }}"
     mode: 0600
   become: True
+
+- name: >
+    main
+    : Rofi-Dmenu Script (for where args are not parsed for dmenu command)
+  copy:
+    dest: "{{ user.home }}/bin/rofi-dmenu"
+    content: |
+        #!/bin/bash
+        rofi -dmenu $@
+    owner: "{{ user.name }}"
+    group: "{{ user.name }}"
+    mode: 0600
+  become: True

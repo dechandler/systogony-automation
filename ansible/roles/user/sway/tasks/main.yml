@@ -1,17 +1,21 @@
 ---
-- name: verify i3 directory present
+- name: >
+    main
+    : Verify Sway User Directory Present
   file:
-    path: "{{ user.home }}/.i3"
+    path: "{{ user.home }}/.config/sway"
     state: directory
     owner: "{{ user.name }}"
     group: "{{ user.name }}"
     mode: 0700
   become: True
 
-- name: i3 config
+- name: >
+    main
+    : Template Config
   template:
     src: "{{ inventory_hostname }}.j2"
-    dest: "{{ user.home }}/.i3/config"
+    dest: "{{ user.home }}/.config/sway"
     owner: "{{ user.name }}"
     group: "{{ user.name }}"
     mode: 0600

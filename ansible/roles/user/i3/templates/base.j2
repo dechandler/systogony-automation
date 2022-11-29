@@ -250,13 +250,13 @@ for_window [class="Orage"] floating enable move absolute position 0px 23px; resi
 ##
 {% block event_keybindings %}
 
-bindsym F3  exec amixer -D pulse sset Master 5%+ unmute
-bindsym F2  exec amixer -D pulse sset Master 5%- unmute
-bindsym F1  exec amixer -D pulse sset Master toggle
+bindsym F3  exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym F2  exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym F1  exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 
-bindsym XF86AudioRaiseVolume  exec amixer -D pulse sset Master 5%+ unmute
-bindsym XF86AudioLowerVolume  exec amixer -D pulse sset Master 5%- unmute
-bindsym XF86AudioMute         exec amixer -D pulse sset Master toggle
+bindsym XF86AudioRaiseVolume  exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume  exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute         exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 {% endblock %}
 
 {% block i3lock %}

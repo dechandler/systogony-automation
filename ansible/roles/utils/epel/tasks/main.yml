@@ -1,0 +1,10 @@
+---
+
+- name: >
+    main
+    : Install EPEL Repo
+  package:
+    name: epel-release
+  become: True
+  when:
+    ansible_distribution == "CentOS"

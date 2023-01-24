@@ -1,0 +1,10 @@
+---
+
+- name: >
+    setup
+    : Service user
+  user:
+    name: mosquitto
+    uid: 6788
+    system: True
+  become: True

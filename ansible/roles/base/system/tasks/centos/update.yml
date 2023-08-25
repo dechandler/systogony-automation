@@ -1,0 +1,8 @@
+---
+- name: >
+    centos/update
+    : Update CentOS Systems
+  yum:
+    name: '*'
+    state: latest
+  become: True

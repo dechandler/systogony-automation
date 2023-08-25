@@ -1,0 +1,11 @@
+---
+- include_role:
+    name: utils/alpine
+    tasks_from: generate-setup
+  vars:
+    setup_name: apk-community
+    ansible_role: base/extra-repos
+    templates:
+      - alpine/setup.sh
+    executable_files:
+      - setup.sh

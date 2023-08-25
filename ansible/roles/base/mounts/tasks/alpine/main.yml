@@ -1,0 +1,11 @@
+---
+- include_role:
+    name: utils/alpine
+    tasks_from: generate-setup
+  vars:
+    setup_name: mounts
+    ansible_role: base/mounts
+    templates:
+      - alpine/setup.sh
+    executable_files:
+      - setup.sh

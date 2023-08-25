@@ -1,0 +1,7 @@
+---
+admin_group:
+  debian: sudo
+  ubuntu: sudo
+  fedora: wheel
+  alpine: wheel
+  centos: wheel

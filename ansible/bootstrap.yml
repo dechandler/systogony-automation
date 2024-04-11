@@ -16,48 +16,46 @@
         tasks_from: flash
 
 
-- name: Initial Setup of Linode Instances
-  hosts: linode
-  gather_facts: False
+# - name: Initial Setup of Linode Instances
+#   hosts: []
+#   gather_facts: False
+#   vars:
+#     ansible_user: root
+#     ansible_port: 22
+#   tasks:
+#     - name: Kick Linode Instance
+#       include_role:
+#         name: init/linode
+#       when: reinit|default('')
+
+
+- name: Initial configuration
+  hosts: router, linode
+  #gather_facts: False
   vars:
-    ansible_user: root
+    ansible_user: "{{ temporary_user_name }}"
     ansible_port: 22
   tasks:
-    - name: Kick Linode Instance
+
+    - name: >
+        bootstrap : router
+        : Setup automation user
       include_role:
-        name: init/linode
-      when: reinit|default('')
+        name: base/automation-user
+      loop_control:
+        loop_var: automation_user
+      loop: "{{ automation_users | default([]) }}"
 
-    - setup: {}
-
-    - name: Setup SSHD
+    - name: >
+        bootstrap : router
+        : Setup SSHD
       include_role:
         name: service/sshd
 
-    - name: Ensure Automation User
-      user:
-        name: david-automation
-        password: $6$2E83FqydDAtF6GA5$MZRz9io8Ys/0MlLEjlvfo55wzd4vDjWM8L1CcmJVKT4XHXYfwUGhcplA1FJ6ZYBiqXJ92t1i5McjBUBvGU3AF1
-        groups: ["wheel", "ssh"]
-
-    - name: Ensure User SSH Directory 
-      file:
-        path: /home/david-automation/.ssh
-        state: directory
-        owner: david-automation
-        mode: 0700
-
-    - name: Copy root's Authorized Keys File
-      copy:
-        src: /root/.ssh/authorized_keys
-        dest: /home/david-automation/.ssh/authorized_keys
-        remote_src: True
-        owner: david-automation
-        mode: 0600
 
 
-- name: Generate deployment scripts and data for eos deployment/update
-  hosts: eos
+- name: Generate deployment scripts and data for alpine deployment/update
+  hosts: alpine
   gather_facts: False
   tasks:
 

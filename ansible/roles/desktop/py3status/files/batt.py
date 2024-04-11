@@ -39,7 +39,7 @@ class Py3status:
 
         percent = int(bat['percent'])
         if percent != 100 or not bat['charging']:
-            text.append("{}%".format(percent))
+            text.append(f"{percent}%")
 
         if (percent <= self.battery_warn) and (not bat['charging']):
             text.append("({})".format(bat['time_until']))

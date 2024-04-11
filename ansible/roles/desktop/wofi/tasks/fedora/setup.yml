@@ -1,0 +1,7 @@
+---
+- name: >
+    fedora/setup
+    : 
+  dnf:
+     name: wofi
+  become: True

@@ -21,6 +21,17 @@ class Py3status:
 
     def __init__(self):
         self.temp = self.initial_temp
+        self._wm = None
+
+
+    @property
+    def wm(self):
+
+        if self._wm:
+            return self._wm
+
+        return "sway"
+
 
     def post_config_hook(self):
 
@@ -52,8 +63,12 @@ class Py3status:
     def _set_temp(self, temp):
 
         temp = bounds(temp, self.min_temp, self.max_temp)
-        self.py3.command_run("redshift -P -O {}".format(temp))
+        if self.wm == "sway":
+            self.py3.command_run("busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q {}".format(temp))
+        elif self.wm == "i3":
+            self.py3.command_run("redshift -P -O {}".format(temp))
         self.temp = temp
+
 
     def _get_color(self):
 

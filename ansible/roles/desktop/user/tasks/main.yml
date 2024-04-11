@@ -36,11 +36,13 @@
   loop_control:
     loop_var: role
   with_items:
-    - autokey
-    - i3
+    #- autokey
+    # - i3
+    # - rofi
+    # - xbindkeys
+
+    - sway
     - py3status
-    - rofi
     - sublime-text
     - terminator
-    - xbindkeys
     - dmenu-utils

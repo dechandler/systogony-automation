@@ -4,7 +4,13 @@
 
 set $Alt    Mod1
 set $Super  Mod4
-set $DMENU  rofi -dmenu
+set $DMENU  wofi -dmenu
+
+
+{% block theme %}
+{% endblock %}
+
+
 
 
 ##
@@ -58,63 +64,38 @@ bar {
     tray_output $bar_output
 
     font pango:Ubuntu Mono 13
-    colors {
-        statusline #ffffff
-        background #000000
-        urgent_workspace   #2f343a #900000 #ffffff
+    colors { 
+        background $neutral5
+        separator  $neutral2
+        statusline $neutral2
 
-        #inactive_workspace #32323200 #32323200 #5c5c5c
+        # State             Border    BG         Text
+        focused_workspace   $main1    $main2     $neutral5
+        active_workspace    $neutral2 $neutral4  $neutral2
+        inactive_workspace  $neutral4 $neutral4  $neutral2
+        urgent_workspace    $urgent   $urgent    $neutral5
+        binding_mode        $neutral5 $binding   $neutral5
     }
 }
 
 
 ##
-### Theming
+### Appearance
 ##
+
+gaps inner 2
+gaps outer -2
 
 font pango:Ubuntu Mono 11
 
-# Colors
-set $white   #FFFFFF
-set $black   #000000
-set $ltblue  #00CCCA
-set $dkblue  #285577
-set $red     #FF0000
-set $ltgrey  #E8E8E8
-set $grey  #929292
-set $dkgrey  #222222
-set $ltbeige #E9E6D5
+# Property Name         Border    BG        Text      Indicate  Child Border
+client.focused          $main3    $main2    $neutral5 $main2    $main2
+client.focused_inactive $main1    $neutral4 $neutral1 $neutral3 $neutral4
+client.unfocused        $neutral3 $neutral4 $neutral1 $neutral4 $neutral4
+client.urgent           $urgent   $urgent   $neutral5 $urgent   $urgent
+client.placeholder      $neutral5 $neutral5 $neutral2 $neutral5 $neutral5
+client.background       $neutral1
 
-# Focused                                                                           
-# Defaults                  #4c7899  #285577   #ffffff  #2e9ef4   #285577
-
-# Focused Tab Title                                                                 
-# A view that has focused descendant container. Tab or stack container              
-#   title that is the parent of the focused container but is not                    
-#   directly focused                                                                
-# Defaults                  #333333  #5f676a   $white
-
-# Focused Inactive                                                                  
-# The most recently focused view within a container which is not focused.           
-# Defaults                  #333333  #5f676a   $white   #484e50   #5f676a           
-
-# Unfocused                                                                         
-# Defaults                  #333333  #222222   #888888  #292d2e   #222222
-
-# Urgent                                                                            
-# A view with an urgency hint                                                       
-# Not supported in Native Wayland - Xwayland windows only                           
-# Defaults                  #2f343a  #900000   $white   #900000   #900000           
-
-
-# class                     border   bg        text     indicator child_border      
-
-# Greyscale
-client.focused              $black  $ltbeige   $black   $red      $dkblue
-client.focused_tab_title    #333333  #5f676a   $white
-client.focused_inactive     $grey    $dkgrey   $white   $red      $dkblue
-client.unfocused            $ltgrey  $black    $white   $red      $dkblue 
-client.urgent               #2f343a  #900000   $white   #900000   #900000
 
 
 ##
@@ -122,7 +103,7 @@ client.urgent               #2f343a  #900000   $white   #900000   #900000
 ##
 
 exec nm-applet
-exec /usr/local/libexec/redshift-wl-daemon.sh
+exec $HOME/.cargo/bin/wl-gammarelay-rs
 exec /usr/local/libexec/py3status/workspaces-daemon.sh $all_monitors
 
 
@@ -141,6 +122,7 @@ bindsym XF86AudioLowerVolume  exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym F3                    exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioRaiseVolume  exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 
+bindsym $Alt+Shift+s          exec grimshot save active "$HOME/tmp/screenshots/$(date +%y-%m-%d_%H:%M:%S).png"
 
 ##
 ### Application Start Keybindings
@@ -148,9 +130,14 @@ bindsym XF86AudioRaiseVolume  exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 
 bindsym $Alt+Return      exec terminator
 
-bindsym $Alt+d           exec j4-dmenu-desktop --dmenu='$DMENU -i -p "Run: "'
-bindsym $Alt+p           exec DMENU='$DMENU' /usr/local/bin/passmenu
+bindsym $Alt+d           exec j4-dmenu-desktop --dmenu='$DMENU -i -p "Run: "
 bindsym $Super+f         exec DMENU='$DMENU' ~/bin/ffx-dmenu
+
+{% for vault in pass_vaults %}
+bindsym $Alt+{{ vault.hotkey }} exec{#
+#} WOFI_PASS_CONFIG="$HOME/var/pass/wofi-{{ vault.name }}.conf"{#
+#} wofi-pass -sc
+{% endfor %}
 
 #bindsym $Alt+semicolon  exec semiautokey
 
@@ -270,8 +257,9 @@ mode ":: Resize ::" {
 for_window [class="^.*"] border pixel 2 hide_edge_borders both
 
 # Per Application
-for_window [class="Firefox"] border pixel 0
+for_window [class="firefox"] border pixel 0
 for_window [class="Pavucontrol"] floating enable move absolute position 864px 23px; resize grow height 100px;
+for_window [app_id="nm-connection-editor"] floating enable;
 
 
 

@@ -1,0 +1,16 @@
+---
+- name: >
+    fedora/setup
+    : Install Packages
+  dnf:
+    name:
+      - sway
+      - wdisplays
+      - grimshot
+  become: True
+
+
+# - name: >
+#     fedora/setup
+#     : Get wofi-pass
+#   git:

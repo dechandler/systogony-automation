@@ -15,8 +15,10 @@
     : Template Config
   template:
     src: "{{ inventory_hostname }}.j2"
-    dest: "{{ user.home }}/.config/sway"
+    dest: "{{ user.home }}/.config/sway/config"
     owner: "{{ user.name }}"
     group: "{{ user.name }}"
     mode: 0600
   become: True
+
+

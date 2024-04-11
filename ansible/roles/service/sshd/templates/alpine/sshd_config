@@ -1,14 +1,15 @@
 
-Port {{ sshd_port }}
+Port {{ sshd.primary.port }}
 
-{% if sshd_listenaddress %}
-ListenAddress {{ sshd_listenaddress }}
-{% endif %}
+{% for host in sshd.primary.allowed_static_hosts|default([]) %}
+ListenAddress {{ static_isolated_hosts[host].gateway }}
+{% endfor %}
 
 PermitRootLogin no
 AllowGroups ssh
 
 AuthenticationMethods publickey
+AuthorizedKeysFile .ssh/authorized_keys
 
 #LogLevel VERBOSE
 
@@ -27,7 +28,6 @@ AcceptEnv {#
     #}LC_ADDRESS  LC_TELEPHONE      {#
     #}LC_NAME     LC_IDENTIFICATION
 
-Subsystem  sftp  /usr/lib/openssh/sftp-server
 
 
 Protocol 2

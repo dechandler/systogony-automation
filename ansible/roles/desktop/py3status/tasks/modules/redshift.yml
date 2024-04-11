@@ -1,13 +1,17 @@
 ---
-- name: i3 | py3status | redshift | Package Dependencies
+- name: >
+    modules/redshift
+    : Package Dependencies
   package:
     name: redshift
     state: present
   become: True
 
-- name: i3 | py3status | redshift | Copy Script
+- name: >
+    modules/redshift
+    : Copy Script
   copy:
-    src: redshift.py
+    src: modules/redshift.py
     dest: /usr/local/libexec/py3status/redshift.py
     mode: 0755
   become: True

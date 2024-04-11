@@ -1,5 +1,7 @@
 ---
-- name: i3 | py3status | Packages
+- name: >
+    install
+    : Packages
   package:
     name: "{{ item }}"
     state: present
@@ -10,7 +12,9 @@
     - python-pip
     - python3-pip
 
-- name: i3 | py3status | Python Packages from PyPi
+- name: >
+    install
+    : Python Packages from PyPi
   pip:
     name: i3-py
     state: present
@@ -18,15 +22,19 @@
   with_items: [ 'pip', 'pip3' ]
   become: True
 
-- name: i3 | py3status | Ensure Script Directory
+- name: >
+    install
+    : Ensure Script Directory
   file:
     path: /usr/local/libexec/py3status
     state: directory
     mode: 0755
   become: True
 
-- name: i3 | py3status | Install Scripts
-  include_tasks: "{{ module }}.yml"
+- name: >
+    install
+    : Install Scripts
+  include_tasks: "modules/{{ module }}.yml"
   loop_control:
     loop_var: module
   with_items:

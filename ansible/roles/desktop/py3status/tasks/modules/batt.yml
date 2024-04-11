@@ -1,7 +1,9 @@
 ---
-- name: i3 | py3status | battery | Package Dependencies
+- name: >
+    modules/batt
+    : Package Dependencies
   package:
-    name: acpi
+    name: "{{ name }}"
     state: present
   with_items:
     - acpi
@@ -9,9 +11,11 @@
     - brightnessctl-udev
   become: True
 
-- name: i3 | py3status | battery | Copy Script
+- name: >
+    modules/batt
+    : Copy Script
   copy:
-    src: batt.py
+    src: modules/batt.py
     dest: /usr/local/libexec/py3status/batt.py
     mode: 0755
   become: True

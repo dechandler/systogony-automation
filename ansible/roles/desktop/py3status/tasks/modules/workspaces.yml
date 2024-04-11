@@ -1,5 +1,7 @@
 ---
-- name: i3 | py3status | workspaces | Package Dependencies
+- name: >
+    modules/workspaces
+    : Package Dependencies
   package:
     name: "{{ item }}"
     state: present
@@ -7,7 +9,9 @@
     - python3-jinja2
   become: True
 
-- name: i3 | py3status | workspaces | Python Dependencies
+- name: >
+    modules/workspaces
+    : Python Dependencies
   pip:
     name: "{{ item }}"
     executable: pip3
@@ -16,9 +20,11 @@
     - i3ipc
   become: True
 
-- name: i3 | py3status | workspaces | Copy Modules And Utilities
+- name: >
+    modules/workspaces
+    : Copy Modules And Utilities
   copy:
-    src: "{{ item }}"
+    src: "modules/{{ item }}"
     dest: /usr/local/libexec/py3status/{{ item }}
     mode: 0755
   with_items:

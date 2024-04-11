@@ -1,8 +1,7 @@
 ---
 - include_tasks: install.yml
 
-- include_role:
-    name: user/py3status
+- include_tasks: user-config.yml
   vars:
     user:
       name: root

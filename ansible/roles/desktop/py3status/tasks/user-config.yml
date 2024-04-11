@@ -1,5 +1,7 @@
 ---
-- name: "i3 | py3status | {{ user.name }} | Ensure i3 Config Directory"
+- name: >
+    user-config : {{ user.name }}
+    : Ensure i3 Config Directory
   file:
     path: "{{ user.home }}/.i3"
     state: directory
@@ -8,7 +10,9 @@
     mode: 0700
   become: True
 
-- name: "i3 | py3status | {{ user.name }} | Copy Config"
+- name: >
+    user-config : {{ user.name }}
+    : Copy Config
   template:
     src: py3status.conf
     dest: "{{ user.home }}/.i3/py3status.conf"
@@ -17,7 +21,9 @@
     mode: 0600
   become: True
 
-- name: i3 | py3status | battery | Ensure brightnessctl Access
+- name: >
+    user-config : {{ user.name }}
+    : Ensure brightnessctl Access
   user:
     name: "{{ user.name }}"
     groups: video

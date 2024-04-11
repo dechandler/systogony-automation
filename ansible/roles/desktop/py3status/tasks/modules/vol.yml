@@ -1,5 +1,7 @@
 ---
-- name: i3 | py3status | volume | Package Dependencies
+- name: >
+    modules/vol
+    : Package Dependencies
   package:
     name: "{{ item }}"
     state: present
@@ -8,9 +10,11 @@
     - pavucontrol
   become: True
 
-- name: i3 | py3status | volume | Copy Script
+- name: >
+    modules/vol
+    : Copy Script
   copy:
-    src: vol.py
+    src: modules/vol.py
     dest: /usr/local/libexec/py3status/vol.py
     mode: 0755
   become: True

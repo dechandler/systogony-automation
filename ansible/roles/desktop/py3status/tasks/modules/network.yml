@@ -1,7 +1,9 @@
 ---
-- name: i3 | py3status | wifi | Copy Script
+- name: >
+    modules/network
+    : Copy Script
   copy:
-    src: network.py
+    src: modules/network.py
     dest: /usr/local/libexec/py3status/network.py
     mode: 0755
   become: True

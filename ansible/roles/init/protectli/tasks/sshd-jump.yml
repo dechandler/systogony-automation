@@ -4,14 +4,21 @@
     role: sshd-jump
     files:
       - setup.sh
+      - sshd-jump.rc
       - Containerfile
       - container-entrypoint.sh
       - sshd_config
-      - sshd-jump.rc
+      - update-image.sh
     executable_files:
       - setup.sh
       - container-entrypoint.sh
       - sshd-jump.rc
+      - update-image.sh
+
+- delegate_to: localhost
+  file:
+    path: "{{ local_build_dir }}/sshd-jump/authorized_keys"
+    state: directory
 
 
 - name: Jump Users Authorized Keys

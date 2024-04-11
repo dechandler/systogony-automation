@@ -1,22 +1,16 @@
 
 Port {{ sshd.primary.port }}
+Port {{ sshd.jump.port }}
 
-{% for host in sshd.primary.allowed_static_hosts|default([]) %}
-ListenAddress {{ static_isolated_hosts[host].gateway }}
-{% endfor %}
+ListenAddress 0.0.0.0
 
 PermitRootLogin no
-AllowUsers {{ login_user.name }}
 
 AuthenticationMethods publickey
-AuthorizedKeysFile /etc/ssh/authorized_keys
+AuthorizedKeysFile /etc/ssh/authorized_keys/%u
 
 #LogLevel VERBOSE
 
-
-
-DisableForwarding yes
-PrintMotd no
 
 AcceptEnv {#
     #}XMODIFIERS  LC_ALL            {#
@@ -26,11 +20,8 @@ AcceptEnv {#
     #}LC_MONETARY LC_MESSAGES       {#
     #}LC_PAPER    LC_MEASUREMENT    {#
     #}LC_ADDRESS  LC_TELEPHONE      {#
-    #}LC_NAME     LC_IDENTIFICATION {#
+    #}LC_NAME     LC_IDENTIFICATION
 
-
-
-Protocol 2
 Compression no
 
 Ciphers {#
@@ -51,3 +42,17 @@ KexAlgorithms {#
     #}diffie-hellman-group16-sha512,{#
     #}diffie-hellman-group18-sha512,{#
     #}diffie-hellman-group14-sha256
+
+
+Match LocalPort {{ sshd.jump.port }}
+    AllowGroups jump
+    AllowTcpForwarding yes
+    ForceCommand /sbin/nologin
+    PermitTTY no
+    AllowAgentForwarding no
+    AllowStreamLocalForwarding no
+
+Match LocalPort {{ sshd.primary.port }}
+    AllowUsers {{ login_user.name }}
+    DisableForwarding yes
+    PrintMotd no

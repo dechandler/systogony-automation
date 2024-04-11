@@ -1,12 +1,12 @@
 ---
-- name: Ensure Directory
+- name: Ensure directory for {{ role }}
   delegate_to: localhost
   file:
     path: "{{ local_build_dir }}/{{ role }}"
     state: directory
 
 
-- name: Template Files into Build Directory
+- name: Template files into build directory
   delegate_to: localhost
   template:
     src: "{{ role }}/{{ item }}"

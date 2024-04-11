@@ -3,7 +3,7 @@ iface lo inet loopback
 
 auto eth0
 iface eth0 inet dhcp
-    hostname eos
+    hostname {{ inventory_hostname }}
 
 
 auto lan
@@ -16,12 +16,14 @@ iface lan inet static
                 internal_network_cidr | ipaddr('prefix')
             }}
 
+{% if 'guest' in networks %}
 iface lan inet static
     address {{
                 networks.guest.cidr | ipmath(1) 
             }}/{{
                 networks.guest.cidr | ipaddr('prefix')
             }}
+{% endif %}
 
 
 {% for host_info in static_isolated_hosts.values() %}

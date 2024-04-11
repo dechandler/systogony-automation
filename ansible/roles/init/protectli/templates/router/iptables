@@ -7,8 +7,12 @@
             %}-s {{ target_ips[source_str] | default(source_str) }} {%
         endif
     %}{%
-        if dest_str != "*"
-            %}-d {{ target_ips[dest_str] | default(dest_str) }} {%
+        if dest_str == "*"
+            %}{%
+        elif dest_str in target_ips.keys()
+            %}-d {{ target_ips[dest_str] }} {%
+        else
+            %}-d {{ dest_str }} {%
         endif
     %}{%
         if iface_str != "*"
@@ -34,7 +38,7 @@
         target
     }}{%
         if comment
-    %}-m comment --comment "{{ comment }}"{%
+    %} -m comment --comment "{{ comment }}"{%
         endif
     %}{%
 endmacro %}{#
@@ -51,12 +55,12 @@ endmacro %}{#
 -A FORWARD -o eth0 -j ACCEPT
 -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
-{% for rule in forward_accepts %}
-# {{ rule.name }}
-{%   for source_str in rule.sources|default(["*"])
-%}{%   for dest_str in rule.destinations|default(["*"])
-%}{%     for port_str in rule.ports|default(["*"])
-%}{{       iptables_rule("FORWARD", source_str, dest_str, port_str)
+{%   for rule in forward_accepts|default([])
+%}{%   set comment = rule.name|default("")
+%}{%   for source_str in rule.sources|default(["*"])
+%}{%     for dest_str in rule.destinations|default(["*"])
+%}{%       for port_str in rule.ports|default(["*"])
+%}{{         iptables_rule("FORWARD", source_str, dest_str, port_str, comment=comment)
 }}
 {%   endfor %}{% endfor %}{% endfor %}
 
@@ -68,7 +72,7 @@ endmacro %}{#
 -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -i eth0 -s {{ internal_network_cidr }} -j DROP
 
-{%   for rule in ingress_accepts
+{%   for rule in ingress_accepts|default([])
 %}{%   set comment = rule.name|default("")
 %}{%   for source_str in rule.sources|default(["*"])
 %}{%     for iface_str in rule.interfaces|default(["*"])
@@ -83,11 +87,12 @@ endmacro %}{#
 
 -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
-{%   for rule in egress_accepts
+{%   for rule in egress_accepts|default([])
+%}{%   set comment = rule.name|default("")
 %}{%   for dest_str in rule.destinations|default(["*"])
 %}{%     for iface_str in rule.interfaces|default(["*"])
 %}{%       for port_str in rule.ports|default(["*"])
-%}{{         iptables_rule("OUTPUT", "*", dest_str, port_str, iface_str=iface_str)
+%}{{         iptables_rule("OUTPUT", "*", dest_str, port_str, iface_str=iface_str, comment=comment)
 }}
 {%   endfor %}{% endfor %}{% endfor %}{% endfor %}
 

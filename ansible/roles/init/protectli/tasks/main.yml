@@ -19,9 +19,16 @@
 
 - include_tasks: router.yml
 - include_tasks: sshd-login.yml
+- include_tasks: apk-community.yml
 
 - include_tasks: podman.yml
 - include_tasks: sshd-jump.yml
+
+- include_tasks: netdata.yml
+- include_tasks: prometheus.yml
+- include_tasks: grafana.yml
+
+- include_tasks: mosquitto.yml
 
 #- include_tasks: pihole.yml
 

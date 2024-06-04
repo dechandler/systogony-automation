@@ -1,0 +1,5 @@
+---
+- name: >
+    Include setup
+  include_tasks: "{{ system }}/setup.yml"
+  when: system in ['fedora']  

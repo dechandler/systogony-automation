@@ -1,7 +1,10 @@
 ---
+- set_fact:
+    user_home: "{{ user.home | default('/home/' + user.name) }}"
+
 - name: ZSH | Create Config Directory
   file:
-    path: "{{ user.home }}/.config/oh-my-zsh"
+    path: "{{ user_home }}/.config/oh-my-zsh"
     state: directory
     owner: "{{ user.name }}"
     group: "{{ user.name }}"
@@ -10,7 +13,7 @@
 - name: ZSH | Add Customizations to oh-my-zsh
   copy:
     src: custom/
-    dest: "{{ user.home }}/.config/oh-my-zsh/"
+    dest: "{{ user_home }}/.config/oh-my-zsh/"
     owner: "{{ user.name }}"
     group: "{{ user.name }}"
   become: True
@@ -18,7 +21,7 @@
 - name: ZSH | Copy zshrc
   copy:
     src: zshrc
-    dest: "{{ user.home }}/.zshrc"
+    dest: "{{ user_home }}/.zshrc"
     owner: "{{ user.name }}"
     group: "{{ user.name }}"
     mode: 0600

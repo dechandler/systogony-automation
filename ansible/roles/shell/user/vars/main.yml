@@ -1,4 +1,6 @@
+---
 admin_group:
   Ubuntu: sudo
   Debian: sudo
   Fedora: wheel
+  CentOS: wheel

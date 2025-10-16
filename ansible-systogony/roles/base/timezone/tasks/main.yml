@@ -1,0 +1,8 @@
+---
+- name: >
+    main
+    : Set time zone
+  community.general.timezone:
+    name: "{{ time_zone }}"
+  # command: timedatectl set-timezone {{ time_zone }}
+  become: True

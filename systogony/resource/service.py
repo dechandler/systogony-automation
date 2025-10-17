@@ -17,7 +17,9 @@ class Service(Resource):
 
 
 
-    def __init__(self, env, svc_spec):
+    def __init__(self, env, svc_spec, svc_defaults):
+
+        self.svc_defaults = svc_defaults  # env.config['svc_defaults']
 
         log.info(f"New Service: {svc_spec['name']}")
         log.debug(f"    Spec: {json.dumps(svc_spec)}")
@@ -125,14 +127,14 @@ class Service(Resource):
 
         if not parent:
             self.spec['service'] = self.name
-            if self.name in self.env.svc_defaults:
-                inherited = self.env.svc_defaults[self.name]
+            if self.name in self.svc_defaults:
+                inherited = self.svc_defaults[self.name]
             else:
                 inherited = {}
 
-        elif parent in self.env.svc_defaults:
+        elif parent in self.svc_defaults:
             self.spec['service'] = parent
-            inherited = self.env.svc_defaults[parent]
+            inherited = self.svc_defaults[parent]
 
         elif parent in self.env.blueprint['services']:
             if parent == self.name:

@@ -30,7 +30,7 @@ class SystogonyConfig:
         if self.config['default_env']:
             self._apply_default_env()
 
-        self.config['service_defaults'] = self._get_service_defaults()
+        self.config['svc_defaults'] = self._get_service_defaults()
 
 
     def configure_loggers(self):
@@ -107,6 +107,11 @@ class SystogonyConfig:
     def update(self, update_data):
         self.config.update(update_data)
 
+    def __delitem__(self, key):
+        try:
+            del self.config[key]
+        except KeyError:
+            pass
 
     def _get_config_file_data(self):
         """
@@ -149,6 +154,7 @@ class SystogonyConfig:
             'environments': {},
             'default_env': None,
             'env_name': "default",
+            'secrets_dir': os.path.join(self.config_dir, "secrets"),
             'blueprint_path': os.path.join(self.config_dir, "blueprint"),
             'use_cache': False,
             'force_cache_regen': False,

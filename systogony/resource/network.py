@@ -45,11 +45,7 @@ class Network(Resource):
         if parent_net:
             parent_net.subnets[self.name] = self
 
-        # Associated resources by type
-        self.hosts = {  # TODO: THIS IS WRONG I THINK
-            host.fqn: host
-            for host in env.host_groups.get(self.name, [])
-        }
+
         self.interfaces = {}  # registry of Interface by .fqn
         self.networks = {self.fqn: self}  # static (self)
         # self.services  # property via service_instances
@@ -112,6 +108,23 @@ class Network(Resource):
 
     #     return f"net_{self.short_fqn_str}_metahost"
 
+    @property
+    def hosts(self):
+
+        hosts = {}
+
+        # direct hosts
+        for host in self.env.host_groups.get(self.name, []):
+            hosts[host.fqn] = host
+
+        # include subnets
+        for subnet in self.subnets.values():
+            for host in subnet.hosts.values():
+                hosts[host.fqn] = host
+
+        return hosts
+
+
     def gen_isolation_subnets(self):
 
         network = ipaddress.ip_network(self.cidr)
@@ -123,7 +136,7 @@ class Network(Resource):
                 'cidr': str(isolation_cidrs[i + 1])  # skip first subnet
             }
             Network(self.env, subnet_spec, parent_net=self)
-            self.subnets[host.name].hosts = {host.fqn: host}
+            #self.subnets[host.name].hosts = {host.fqn: host}
 
 
 

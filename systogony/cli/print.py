@@ -11,7 +11,7 @@ import sys
 
 from .cli import CliInterface
 
-from ..api import AnsibleApi
+from ..api import AnsibleApi, TerraformApi
 
 
 log = logging.getLogger("systogony")
@@ -39,8 +39,11 @@ class PrintCli(CliInterface):
                     'inv', 'inventory'
                 ],
                 'handler': self.ansible_inventory
+            },
+            'terraform': {
+                'aliases': ['tf'],
+                'handler': self.terraform_data
             }
-
         }
         self.no_args_operation = 'ansible'
         self.no_matching_args_operation = 'help'
@@ -50,3 +53,8 @@ class PrintCli(CliInterface):
 
         api = AnsibleApi(self.config)
         print(json.dumps(api.inventory, indent=4))
+
+    def terraform_data(self, args):
+
+        api = TerraformApi(self.config)
+        print(json.dumps(api.template_data, indent=4))

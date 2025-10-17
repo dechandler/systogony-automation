@@ -63,8 +63,11 @@ class ApiInterface:
         cache_path = os.path.join(
             self.config['blueprint_path'], f".cache-{structure}.json"
         )
-        with open(cache_path, 'w') as fh:
-            json.dump(data, fh, indent=4)
+        try:
+            with open(cache_path, 'w') as fh:
+                json.dump(data, fh, indent=4)
+        except:
+            return False
 
         log.info(f"Cache written to {cache_path}")
 

@@ -170,7 +170,7 @@ class Host(Resource):
         return extra_vars
 
 
-    def add_interfaces(self):
+    def populate_interfaces(self):
 
         log.debug(f"Iface Specs for {self.name}: {self.spec.get('interfaces', {})}")
 

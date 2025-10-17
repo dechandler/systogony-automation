@@ -33,12 +33,10 @@ def main():
 
     try:
         _main()
-    except BlueprintLoaderError:
-        log.error("Exiting due to BlueprintLoaderError")
-    except MissingServiceError:
-        pass
-    except NoSuchEnvironmentError:
-        pass
-
-    except KeyboardInterrupt:
-        pass
+    except (
+        BlueprintLoaderError,
+        KeyboardInterrupt,
+        MissingServiceError,
+        NoSuchEnvironmentError
+    ) as e:
+        log.error(f"Exiting due to {e.__class__}: {str(e)}")

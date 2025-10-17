@@ -5,6 +5,7 @@ import sys
 
 from subprocess import Popen, PIPE
 
+
 log = logging.getLogger('systogony')
 
 ANSI_ESCAPE = re.compile(r'(?:\x1B[@-_]|[\x80-\x9F])[0-?]*[ -/]*[@-~]')
@@ -126,9 +127,11 @@ class CliInterface:
             if not line:
                 break
 
-            err_line = p.stderr.readline()
-            if err_line:
-                print(err_line.decode(), file=sys.stderr, end='')
+            # while p.stderr.readable():
+            #    err_line = p.stderr.readline()
+            #    if err_line:
+            #        log.info(err_line.decode())
+            #     # print(err_line.decode(), file=sys.stderr, end='')
 
             log.debug(ANSI_ESCAPE.sub('', line.decode().rstrip()))
             print(line.decode(), end='')
@@ -137,8 +140,8 @@ class CliInterface:
             err_line = p.stderr.readline()
             if not err_line:
                 break
-            log.debug(ANSI_ESCAPE.sub('', err_line.decode().rstrip()))
-            print(err_line.decode(), file=sys.stderr, end='')
+            log.info(ANSI_ESCAPE.sub('', err_line.decode().rstrip()))
+            #print(err_line.decode(), file=sys.stderr, end='')
 
 
     def print_help(self, args):

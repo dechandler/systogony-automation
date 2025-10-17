@@ -17,10 +17,9 @@ log = logging.getLogger("systogony")
 
 class ResourceShorthandQuery:
 
-    def __init__(self, config, environment):
+    def __init__(self, env):
 
-        self.config = config
-        self.env = environment
+        self.env = env
 
 
     def resolve_to_rtype(

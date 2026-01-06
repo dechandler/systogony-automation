@@ -59,7 +59,8 @@ class Network(Resource):
         #self.acls = {'forward': {}}
 
         self.spec_var_ignores.extend([
-            'subnets', 'cidr_prefix_offset', 'cidr_index', 'type', 'router'
+            'subnets', 'cidr', 'cidr_prefix_offset', 'cidr_index',
+            'type', 'router'
         ])
         # self.extra_vars  # property
 
@@ -92,6 +93,8 @@ class Network(Resource):
         if self.net_type == "isolation":
             self.gen_isolation_subnets()
 
+        self.ports = {'any': "*"}
+
         log.debug(f"Network data: {json.dumps(self.serialized, indent=4)}")
 
 
@@ -107,6 +110,21 @@ class Network(Resource):
     # def metahost_name(self):
 
     #     return f"net_{self.short_fqn_str}_metahost"
+
+    @property
+    def introspect(self):
+
+        return {
+            'name': self.name,
+            'short_fqn': self.short_fqn_str,
+            'cidr': self.cidr,
+            'net_type': self.net_type,
+            #'parent': net.parent,
+            'interfaces': [iface.short_fqn_str for iface in self.interfaces.values()],
+            'subnets': [*self.subnets],
+            'vars': self.vars
+        }
+
 
     @property
     def hosts(self):

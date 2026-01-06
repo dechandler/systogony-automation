@@ -2,7 +2,6 @@
 
 """
 import json
-import logging
 import os
 import socket
 
@@ -12,9 +11,6 @@ from functools import cached_property
 from .api import ApiInterface
 
 from ..environment import Environment
-
-
-log = logging.getLogger('systogony')
 
 
 class AnsibleApi(ApiInterface):
@@ -55,7 +51,7 @@ class AnsibleApi(ApiInterface):
         # Set local connection for localhost and local hostname
         hostvars['localhost']['ansible_connection'] = "local"
         local_hostname = socket.gethostname().split('.')[0]
-        log.debug(f"Local hostname: {local_hostname}")
+        self.log.debug(f"Local hostname: {local_hostname}")
         if local_hostname in hostvars:
             hostvars[local_hostname]['ansible_connection'] = "local"
 
@@ -76,7 +72,7 @@ class AnsibleApi(ApiInterface):
         # Process hosts
         for hostname, hvars in hostvars.items():
 
-            log.debug(hvars)
+            self.log.debug(hvars)
             supported_oses = [
                 'centos', 'alma', 'fedora', 'atomic', 'debian', 'ubuntu'
             ]

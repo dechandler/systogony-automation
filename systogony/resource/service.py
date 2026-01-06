@@ -55,6 +55,18 @@ class Service(Resource):
         log.debug(f"Service data: {json.dumps(self.serialized, indent=4)}")
 
     @property
+    def introspect(self):
+
+        return {
+            'name': self.name,
+            'short_fqn': self.short_fqn_str,
+            'service_instances': self.short_fqns_strs(self.service_instances),
+            'vars': self.vars
+
+        }
+
+
+    @property
     def ports(self):
 
         if self.port_overrides in [None, {}, []]:

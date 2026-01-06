@@ -45,7 +45,7 @@ class Environment:
         self.blueprint.populate_env_interfaces()
         self.blueprint.populate_env_services()
         self.blueprint.populate_env_service_instances()
-        #self.blueprint.populate_env_acls()
+        self.blueprint.populate_env_acls()
 
         self.vars = self.blueprint['vars']
 
@@ -63,6 +63,17 @@ class Environment:
             **self.acls
         }
 
+    @property
+    def introspect(self):
+
+        return {
+            'networks': [ r.introspect for r in self.networks.values() ],
+            'hosts': [ r.introspect for r in self.hosts.values() ],
+            'interfaces': [ r.introspect for r in self.interfaces.values() ],
+            'services': [ r.introspect for r in self.services.values() ],
+            'service_instances': [ r.introspect for r in self.service_instances.values() ],
+            'acls': [ r.introspect for r in self.acls.values() ],
+        }
 
     def register(self, resource):
 

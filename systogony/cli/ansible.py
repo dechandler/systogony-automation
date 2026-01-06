@@ -3,14 +3,11 @@
 
 
 """
-import logging
 import os
 import re
 import sys
 
 from .cli import CliInterface
-
-log = logging.getLogger("systogony")
 
 
 class AnsibleCli(CliInterface):

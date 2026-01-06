@@ -4,6 +4,8 @@ import logging
 import os
 import sys
 
+from declib import DeclibMain, DeclibLogger
+
 from .config import SystogonyConfig
 from .cli import MainCli
 
@@ -15,24 +17,10 @@ from .exceptions import (
 log = logging.getLogger("systogony")
 
 
-def _main():
-
-    config = SystogonyConfig()
-    config.configure_loggers()
-
-    log.info("Starting Systogony")
-    log.debug(f"  PID: {os.getpid()}")
-    log.debug(f"  Args: {sys.argv[1:]}")
-
-    config.flush_pre_log()
-
-    MainCli(config).handle_args(sys.argv[1:])
-
-
 def main():
 
     try:
-        _main()
+        DeclibMain("systogony", Config=SystogonyConfig, Cli=MainCli)
     except (
         BlueprintLoaderError,
         KeyboardInterrupt,

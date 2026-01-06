@@ -3,7 +3,6 @@
 
 
 """
-import logging
 import os
 import re
 import sys
@@ -14,9 +13,6 @@ from .cli import CliInterface
 from ..api import TerraformApi
 
 from ..exceptions import NoSuchEnvironmentError
-
-
-log = logging.getLogger("systogony")
 
 
 class TerraformCli(CliInterface):

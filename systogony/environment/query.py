@@ -71,13 +71,41 @@ class ResourceShorthandQuery:
         return None, []
 
 
+    def get_narrowest_matches(self, shorthand_str):
+
+
+        matches = self.walk_get_matches(shorthand_str)
+
+        sorted_matches = {k: {} for k in [
+            'network', 'service', 'host', 'interface', 'service_instance', 'acl'
+        ]}
+        for fqn, match in matches.items():
+            sorted_matches[match.resource_type][fqn] = match
+
+
+        if sorted_matches['host'] or sorted_matches['network']:
+            sorted_matches['interface'] = {}
+        if sorted_matches['network']:
+            sorted_matches['host'] = {}
+        if sorted_matches['service']:
+            sorted_matches['service_instance'] = {}
+            sorted_matches['host'] = {}
+            sorted_matches['network'] = {}
+
+        matches = {}
+        for rtype_matches in sorted_matches.values():
+            matches.update(rtype_matches)
+
+        return matches
+
+
 
     def walk_get_matches(self, shorthand_str, resource_types=None):
 
 
         if resource_types is None:
             resource_types = [
-                'network', 'service', 'host', 'interface', 'service_instance'
+                'network', 'service', 'host', 'interface', 'service_instance', 'acl'
             ]
         # names_out = {
         #     name: [

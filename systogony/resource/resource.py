@@ -18,7 +18,6 @@ class Resource:
         self.name = spec['name']
 
 
-
         #self.env.names[self.name].append(self)
 
         self.fqn = tuple([(self.resource_type, spec['name'])])
@@ -102,7 +101,7 @@ class Resource:
     @property
     def short_fqn_str(self):
 
-        return '-'.join([ pair[1] for pair in self.fqn ])
+        return '.'.join([ pair[1] for pair in self.fqn ])
 
     @property
     def addresses(self):
@@ -158,7 +157,7 @@ class Resource:
                     'overrides': {**(overrides or {})},
                 }
                 for target
-                in self.env.query.walk_get_matches(shorthand).values()
+                in self.env.query.get_narrowest_matches(shorthand).values()
             })
 
         owner = {self.fqn: self}
@@ -174,38 +173,36 @@ class Resource:
             sources, destinations = targets, owner
             acl_spec['source_specs'] = target_specs
             acl_spec['destination_specs'] = owner_specs
+            ports = self.ports
         elif acl_spec_type == "access":
             sources, destinations = owner, targets
             acl_spec['source_specs'] = owner_specs
             acl_spec['destination_specs'] = target_specs
-
+            ports = {}
+            for target in targets.values():
+                ports.update(target.ports)
 
         owner_str = owner[self.fqn].name
         targets_str = '-'.join([t.name for t in targets.values()])
-        src_str = ', '.join([s.name for s in sources.values()])
-        dest_str = ', '.join([s.name for s in destinations.values()])
+        src_str = ','.join([s.name for s in sources.values()])
+        dest_str = ','.join([s.name for s in destinations.values()])
+
 
         acl_spec.update({
             'name': "_".join([owner_str, acl_spec_type, targets_str]),
             'origin': self,
             'description': " ".join([
                 f"{src_str} TO {dest_str} ON",
-                str([*self.ports.values()]) if self.ports else "any port"
+                ','.join([str(p) for p in ports.values()])
             ]),
-            'ports': self.ports
+            'ports': ports
         })
         self.env.gen_acl(self, acl_spec, sources, destinations)
 
 
-    def _fqns_strs(self, targets):
+    def short_fqns_strs(self, targets):
 
-        items = []
-        for target in targets:
-            target_items = []
-            for pair in target:
-                target_items.extend(pair)
-            items.append('.'.join(target_items))
-        return items
+        return [ t.short_fqn_str for t in targets.values() ]
 
 
     def walk_matches(self, shorthand, resource_types=None):

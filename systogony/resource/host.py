@@ -49,8 +49,21 @@ class Host(Resource):
         self.spec_var_ignores.extend(['groups'])
         # self.extra_vars = {}  # default
 
+        self.ports = {'any': "*"}
+
         log.debug(f"Host data: {json.dumps(self.serialized, indent=4)}")
 
+    @property
+    def introspect(self):
+
+        return {
+            'name': self.name,
+            'short_fqn': self.short_fqn_str,
+            'default_iface': self.default_iface.short_fqn_str,
+            'interfaces': [iface.short_fqn_str for iface in self.interfaces.values()],
+            'svc_instances': [inst.short_fqn_str for inst in self.service_instances.values()],
+            'vars': self.vars
+        }
 
     @property
     def default_iface(self):

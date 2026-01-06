@@ -69,8 +69,24 @@ class Interface(Resource):
         #network = self.spec['network']
         #print(network, host.fqn)
 
+        self.ports = {'any': "*"}
+
 
         log.debug(f"    Interface data: {json.dumps(self.serialized, indent=4)}")
+
+
+    @property
+    def introspect(self):
+
+        return {
+            'name': self.name,
+            'short_fqn': self.short_fqn_str,
+            'network': self.network.short_fqn_str,
+            'host': self.host.short_fqn_str,
+            # 'ingress': self.short_fqns_strs(self.acls['ingress']),
+            # 'egress': self.short_fqns_strs(self.acls['egress']),
+            'vars': self.vars
+        }
 
     def _get_xgress_ips(self, rule_type, remotes, network):
 

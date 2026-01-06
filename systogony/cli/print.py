@@ -3,7 +3,6 @@
 
 """
 import json
-import logging
 import os
 import socket
 import sys
@@ -11,10 +10,7 @@ import sys
 
 from .cli import CliInterface
 
-from ..api import AnsibleApi, TerraformApi
-
-
-log = logging.getLogger("systogony")
+from ..api import AnsibleApi, TerraformApi, IntrospectionApi
 
 
 class PrintCli(CliInterface):
@@ -43,11 +39,31 @@ class PrintCli(CliInterface):
             'terraform': {
                 'aliases': ['tf'],
                 'handler': self.terraform_data
+            },
+            'introspection': {
+                'aliases': [],
+                'handler': self.introspection
             }
         }
         self.no_args_operation = 'ansible'
         self.no_matching_args_operation = 'help'
 
+    def introspection(self, args):
+
+        all_partials = [
+            'networks', 'hosts', 'interfaces', 'services',
+            'service_instances', 'acls'
+        ]
+
+        if not args or args == ["all"]:
+            args = all_partials
+
+        for arg in args:
+            if arg not in all_partials:
+                self.log.error(f"{arg} not a valid introspection arg")
+
+        api = IntrospectionApi(self.config, partials=args)
+        print(json.dumps(api.introspection, indent=4))
 
     def ansible_inventory(self, args):
 

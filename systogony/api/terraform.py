@@ -16,9 +16,6 @@ from .api import ApiInterface
 from ..environment import Environment
 
 
-log = logging.getLogger('systogony')
-
-
 class TerraformApi(ApiInterface):
 
     @property
@@ -67,7 +64,7 @@ class TerraformApi(ApiInterface):
             template_env
         ))
 
-        log.debug(f"Attempting to load {tf_env_template_dir}")
+        self.log.debug(f"Attempting to load {tf_env_template_dir}")
 
         try:
             tmpl_files = os.listdir(tf_env_template_dir)

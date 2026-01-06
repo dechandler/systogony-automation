@@ -83,6 +83,22 @@ class Acl(Resource):
 
         # Lineage for walking up and down the heirarchy
 
+    @property
+    def introspect(self):
+
+        print(self.origin)
+
+        return {
+            'name': self.name,
+            'short_fqn_str': self.short_fqn_str,
+            'description': self.description,
+            'origin': self.origin.short_fqn_str,
+            'sources': self.short_fqns_strs(self.sources),
+            #'sources_spec': self.sources_spec,
+            'destinations': self.short_fqns_strs(self.destinations),
+            #'destinations_spec': self.destinations_spec,
+            'ports': self.ports
+        }
 
     # def get_rules(self, networks, rule_type):
 

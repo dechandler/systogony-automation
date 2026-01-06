@@ -99,9 +99,21 @@ class ServiceInstance(Resource):
         # self.vars.update(overrides)
 
 
-
-
         #log.debug(f"    Data: {json.dumps(self.serialized, indent=4)}")
+
+    @property
+    def introspect(self):
+
+        return {
+            'name': self.name,
+            'short_fqn': self.short_fqn_str,
+            'service': self.service.short_fqn_str,
+            'host': self.host.short_fqn_str,
+            'interfaces': [iface.short_fqn_str for iface in self.interfaces.values()],
+            'networks': [net.short_fqn_str for net in self.networks.values()],
+            'vars': self.vars
+        }
+
 
     @property
     def extra_vars(self):

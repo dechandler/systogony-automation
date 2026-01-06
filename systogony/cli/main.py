@@ -3,7 +3,6 @@
 
 """
 import json
-import logging
 import os
 import sys
 
@@ -13,9 +12,6 @@ from .cli import CliInterface
 from .print import PrintCli
 from .ansible import AnsibleCli
 from .terraform import TerraformCli
-
-
-log = logging.getLogger("systogony")
 
 
 class MainCli(CliInterface):
@@ -42,6 +38,10 @@ class MainCli(CliInterface):
             'terraform': {
                 'aliases': ['tf'],
                 'handler': lambda: TerraformCli(self.config).handle_args
+            },
+            'tests': {
+                'aliases': ['test'],
+                'handler': lambda: TestsCli(self.config).handle_args
             }
 
         }

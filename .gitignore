@@ -1,2 +1,4 @@
-__pycache__
-private
+__pycache__/
+private/
+.ansible/
+*.retry

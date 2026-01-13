@@ -1,6 +1,6 @@
 # Systogony Automation
 
-Systogony is the automation for my personal environment (laptops, servers, routers, appliances, IoT devices, cloud services), and Automation is the layer for managing automation workflows. The roles here can function alone, but it is designed to be used with Systogony Core, which provides input data, a friendly CLI, and runtime configuration.
+Systogony is the automation for my personal environment (laptops, servers, routers, appliances, IoT devices, cloud services), and Automation is the layer for managing automation workflows. The roles here can function alone, but it is designed to be used with [Systogony Core](https://github.com/dechandler/systogony-core), which provides input data, a friendly CLI, and runtime configuration.
 
 ## Getting started
 
